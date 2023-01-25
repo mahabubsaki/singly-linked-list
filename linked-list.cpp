@@ -12,10 +12,12 @@ class LinkedList
 {
 public:
     node *head;
+    int size;
     // initially pointing head to null
     LinkedList()
     {
         head = NULL;
+        size = 0;
     }
     // creates a new node and returns a node pointer whichs value is the given integar to the function and temporarily pointing next node as null
     node *CreateNewNode(int value)
@@ -51,6 +53,7 @@ public:
     {
         // while inserting a new node to the head we are creating a node pointer with function
         node *newNode = CreateNewNode(value);
+        size++;
         // if head equal null so we can say that the linkedlist is empty that's why we are pointing the head to the newly created node and returning from the function
         if (head == NULL)
         {
@@ -75,6 +78,7 @@ public:
     }
     void InsertAtLast(int value)
     {
+        size++;
         node *current = head;
         node *newnode = CreateNewNode(value);
         // IF current is null than we can say the list is full empty
@@ -126,6 +130,7 @@ public:
             }
             else
             {
+                size++;
                 int countIndex = 1;
                 node *previous = head;
                 while (index > countIndex)
@@ -141,23 +146,118 @@ public:
             }
         }
     }
-    void SearchDistinctValue(int value)
+    int getSize()
     {
+        return size;
     }
-    void SearchAll(int value)
+    int getValue(int index)
     {
+        node *current = head;
+        int countIndex = 0;
+        while (current != NULL)
+        {
+            if (countIndex == index)
+            {
+                return current->data;
+            }
+            current = current->next;
+            countIndex++;
+        }
+        return -1;
+    }
+    void DeleteHead()
+    {
+        if (head == NULL)
+        {
+            return;
+        }
+        size--;
+        node *current = head;
+        head = current->next;
+        delete current;
+    }
+    void DeleteLast()
+    {
+        if (head == NULL)
+        {
+            return;
+        }
+        size--;
+        node *current = head;
+        node *previos = head;
+        int last_prevvious = size - 1;
+        int countInedx = 0;
+        if (current->next == NULL)
+        {
+            head = NULL;
+            delete current;
+            return;
+        }
+        while (current->next != NULL)
+        {
+            current = current->next;
+        }
+        while (countInedx != last_prevvious)
+        {
+            previos = previos->next;
+            countInedx++;
+        }
+        previos->next = NULL;
+        delete current;
+    }
+    void DeleteInIndex(int index)
+    {
+        if (index >= size)
+        {
+            return;
+        }
+        if (index == 0)
+        {
+            DeleteHead();
+            return;
+        }
+        if (index == size - 1)
+        {
+            DeleteLast();
+            return;
+        }
+        int currentIndex = 1;
+        node *previos = head;
+        node *current = head->next;
+
+        while (currentIndex != index)
+        {
+            current = current->next;
+            previos = previos->next;
+            currentIndex++;
+        }
+        previos->next = current->next;
+        size--;
+        delete current;
     }
 };
 int main()
 {
     LinkedList mylist;
     mylist.InsertAtLast(10);
-    mylist.InsertAtLast(20);
-    mylist.InsertAtLast(25);
-    mylist.InsertAtLast(50);
-    mylist.InsertAtPosition(3, 15);
-    mylist.InsertAtPosition(1, 7);
-    // mylist.InsertAtPosition(21, 35);
+    mylist.InsertAtLast(100);
+    mylist.InsertAtLast(130);
+    mylist.InsertAtLast(103);
+    mylist.InsertAtLast(1041);
+    mylist.InsertAtLast(103123);
+    cout << "Size " << mylist.getSize() << endl;
+    mylist.Traverse();
+
+    mylist.DeleteInIndex(3);
+    cout << "Size " << mylist.getSize() << endl;
+    mylist.DeleteInIndex(3);
+    cout << "Size " << mylist.getSize() << endl;
+    mylist.DeleteInIndex(3);
+    cout << "Size " << mylist.getSize() << endl;
+    mylist.DeleteInIndex(0);
+    cout << "Size " << mylist.getSize() << endl;
+    mylist.DeleteInIndex(1);
+    cout << "Size " << mylist.getSize() << endl;
     mylist.Traverse();
     // mylist.SearchDistinctValue(10);
     // mylist.SearchDistinctValue(5);
