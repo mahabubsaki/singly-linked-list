@@ -29,6 +29,10 @@ public:
     }
     int IfIndexAvailable(int index)
     {
+        if (index < 0)
+        {
+            return 0;
+        }
         node *current = head;
         int countIndex = 0;
         while (current != NULL)
@@ -207,8 +211,9 @@ public:
     }
     void DeleteInIndex(int index)
     {
-        if (index >= size)
+        if (index >= size || index < 0)
         {
+            cout << "Index is not available" << endl;
             return;
         }
         if (index == 0)
@@ -235,30 +240,66 @@ public:
         size--;
         delete current;
     }
+    void InsertAfterValue(int after, int value)
+    {
+        int countIndex = 0;
+        node *current = head;
+        int isValExist = 0;
+
+        while (current->data != after && current->next != NULL)
+        {
+            current = current->next;
+            countIndex++;
+        }
+        if (current->data == after)
+        {
+            isValExist = 1;
+        }
+        if (isValExist)
+        {
+            if (countIndex + 1 == size)
+            {
+                InsertAtLast(value);
+                return;
+            }
+            InsertAtPosition(countIndex + 1, value);
+        }
+        else
+        {
+            cout << "Value Not Found";
+        }
+    }
+    void printReverseHelper(node *current)
+    {
+        if (current == NULL)
+        {
+            return;
+        }
+        printReverseHelper(current->next);
+        cout << current->data << " ";
+    }
+    void printReverse()
+    {
+        printReverseHelper(head);
+    }
 };
 int main()
 {
     LinkedList mylist;
+    mylist.InsertAtLast(10);
     mylist.InsertAtLast(10);
     mylist.InsertAtLast(100);
     mylist.InsertAtLast(130);
     mylist.InsertAtLast(103);
     mylist.InsertAtLast(1041);
     mylist.InsertAtLast(103123);
-    cout << "Size " << mylist.getSize() << endl;
-    mylist.Traverse();
 
-    mylist.DeleteInIndex(3);
-    cout << "Size " << mylist.getSize() << endl;
-    mylist.DeleteInIndex(3);
-    cout << "Size " << mylist.getSize() << endl;
-    mylist.DeleteInIndex(3);
-    cout << "Size " << mylist.getSize() << endl;
-    mylist.DeleteInIndex(0);
-    cout << "Size " << mylist.getSize() << endl;
-    mylist.DeleteInIndex(1);
-    cout << "Size " << mylist.getSize() << endl;
+    mylist.InsertAfterValue(100, 43);
+    mylist.InsertAfterValue(43, 44);
+    mylist.InsertAfterValue(103123, 44);
+    mylist.InsertAfterValue(10, 44);
     mylist.Traverse();
+    mylist.printReverse();
     // mylist.SearchDistinctValue(10);
     // mylist.SearchDistinctValue(5);
     // mylist.SearchAll(30);
